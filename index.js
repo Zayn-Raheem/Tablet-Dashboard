@@ -4,6 +4,8 @@ function updateClock() {
   const minutes = now.getMinutes().toString().padStart(2, "0");
   const seconds = now.getSeconds().toString().padStart(2, "0");
   const time = `${hours}:${minutes}:${seconds}` ;
+  document.getElementById("clock").innerHTML = time;
+  console.log("clock is running")
 }
 
 setInterval(updateClock, 1000);
