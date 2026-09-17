@@ -2,12 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tablet OS Dashboard</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <<header>
-        Hello Zayn
-    </header>
+    <div class="panel">
+        <!-- Top Navigation / Status Bar -->
+        <header class="navbar">
+            <div class="nav-section time-date">
+                <span class="clock">21:59:07</span>
+                <span class="date">THU, SEP 17</span>
+            </div>
+            <div class="nav-section title-banner">
+                <h1>DAILY OPS</h1>
+            </div>
+            <div class="nav-section weather-status">
+                <span class="temp">19°C</span>
+                <span class="weather-icon">☁</span>
+                <span class="battery">[ 96% ]</span>
+            </div>
+        </header>
+
+        <!-- 4-Quadrant Main Dashboard -->
+        <main class="dashboard">
+            
+            <!-- QUAD 1: TASKS (Google Tasks Sync) -->
+            <section class="quadrant tasks-quad">
+                <div class="quad-header">
+                    <span>TASKS</span>
+                    <span class="sync-tag">[ G-TASKS ]</span>
+                </div>
+                <div class="quad-content">
+                    <ul class="task-list">
+                        <li class="completed">[X] Submit CS assignment</li>
+                        <li class="task-overdue">[!] Read Chapter 4 - Networks</li>
+                        <li>[ ] Clean desk & workstation</li>
+                        <li>[ ] Buy groceries</li>
+                        <li>[ ] Reply to lab instructor</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- QUAD 2: CALENDAR (Google Calendar Sync) -->
+            <section class="quadrant calendar-quad">
+                <div class="quad-header">
+                    <span>CALENDAR</span>
+                    <span class="sync-tag">[ G-CAL ]</span>
+                </div>
+                <div class="quad-content">
+                    <div class="event-item active">
+                        <span class="time">10:00 AM</span>
+                        <span class="event-title">Team Standup Meeting</span>
+                    </div>
+                    <div class="event-item">
+                        <span class="time">02:30 PM</span>
+                        <span class="event-title">Project Review w/ Mentor</span>
+                    </div>
+                    <div class="event-item">
+                        <span class="time">06:00 PM</span>
+                        <span class="event-title">Gym - Upper Body</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUAD 3: TIMETABLE (Uni Schedule) -->
+            <section class="quadrant timetable-quad">
+                <div class="quad-header">
+                    <span>TIMETABLE</span>
+                    <span class="sync-tag">[ UNI ]</span>
+                </div>
+                <div class="quad-content">
+                    <div class="schedule-grid">
+                        <div class="slot current">
+                            <span class="code">CS301</span>
+                            <span class="detail">09:00 - Data Structures</span>
+                            <span class="loc">Lec Hall A</span>
+                        </div>
+                        <div class="slot">
+                            <span class="code">CS305</span>
+                            <span class="detail">11:30 - Operating Systems</span>
+                            <span class="loc">Lab 2B</span>
+                        </div>
+                        <div class="slot">
+                            <span class="code">MATH202</span>
+                            <span class="detail">14:00 - Linear Algebra</span>
+                            <span class="loc">Lec Hall C</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUAD 4: WEATHER -->
+            <section class="quadrant weather-quad">
+                <div class="quad-header">
+                    <span>WEATHER</span>
+                    <span class="sync-tag">[ LOCAL ]</span>
+                </div>
+                <div class="quad-content weather-layout">
+                    <div class="weather-main">
+                        <div class="big-temp">19°C</div>
+                        <div class="condition">PARTLY CLOUDY</div>
+                    </div>
+                    <div class="weather-details">
+                        <p>HUMIDITY: 62%</p>
+                        <p>WIND: 12 KM/H NW</p>
+                        <p>RAIN: 10%</p>
+                        <p>UV INDEX: 3 LOW</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
 </body>
 </html>
