@@ -29,6 +29,8 @@ async function updateWeather() {
     const weatherApi = await fetch('https://api.openweathermap.org/data/2.5/weather?q=Birmingham,UK&appid=93eab7c744e431f9d47792b7b9f09238&units=metric')
     const weatherData = await weatherApi.json()
     const temperature = weatherData.main.temp;
+    const temperatureDisplay = `${Math.round(temperature, 2)}°C`
+
     const weatherDescription = weatherData.weather[0].description;    
     const humidity = weatherData.main.humidity;
     const humidityDisplay = `HUMIDITY: ${humidity}%`
@@ -42,15 +44,16 @@ async function updateWeather() {
 
     const feelsLike = weatherData.main.feels_like;
     const feelsLikeDisplay = `Feels like: ${feelsLike}°C` 
-    
 
-    document.getElementById("temperature").innerHTML= temperature;
+    document.getElementById("temperature-detail").innerHTML = temperatureDisplay;
+    document.getElementById("temperature-main").innerHTML= temperatureDisplay;
     document.getElementById("weather").innerHTML= weatherDescription;
     document.getElementById("humidity").innerHTML = humidityDisplay;
     document.getElementById("windSpeed").innerHTML = windDisplay;
     document.getElementById("cloud_cover").innerHTML = cloudCoverDisplay;
     document.getElementById("feels_like").innerHTML = feelsLikeDisplay;
 
+    console.log(weatherData)
     console.log(temperature)
     console.log(weatherDescription)
     console.log(humidityDisplay)
