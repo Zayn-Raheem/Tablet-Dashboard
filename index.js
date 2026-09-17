@@ -26,7 +26,7 @@ function updateDate() {
 }
 
 async function updateWeather() {
-    const weatherApi = await fetch('https://api.openweathermap.org/data/2.5/weather?q=Birmingham,UK&appid=93eab7c744e431f9d47792b7b9f092388&units=metric')
+    const weatherApi = await fetch('https://api.openweathermap.org/data/2.5/weather?q=Birmingham,UK&appid=93eab7c744e431f9d47792b7b9f09238&units=metric')
     const weatherData = await weatherApi.json()
     const temperature = weatherData.main.temp;
     const weatherDescription = weatherData.weather[0].description;    
