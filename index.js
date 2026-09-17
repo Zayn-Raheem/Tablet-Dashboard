@@ -9,18 +9,20 @@ function updateClock() {
 }
 
 function updateDate() {
-    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
         "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-    ]
+    ];
     const today = new Date();
     const weekDayNum = today.getDay();
     const weekday = days[weekDayNum];
     const month = today.getMonth();
-    const dateToday = `${weekDayNum}, ${weekday} ${months[month]}`
-    document.getElementById("date").innerHTML = dateToday;
-    console.log(dateToday)
+    const dayOfMonth = today.getDate();
 
+    const dateToday = `${weekday}, ${months[month]} ${dayOfMonth}`;
+    
+    document.getElementById("date").innerHTML = dateToday;
+    console.log(dateToday);
 }
 
 setInterval(updateClock, 1000);
