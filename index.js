@@ -17,7 +17,7 @@ function updateDate() {
     const day = today.getDate();
     const month = today.getMonth();
     const year = today.getFullYear();
-    const date = `${day} ${months[month - 1]} ${year}`
+    const date = `${day} ${months[month]} ${year}`
     document.getElementById("date").innerHTML = date;
     console.log(date)
 
