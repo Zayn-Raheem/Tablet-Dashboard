@@ -9,17 +9,17 @@ function updateClock() {
 }
 
 function updateDate() {
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    const months = ["January", "February", "March", "April", "May", "June", 
-        "July", "August", "September", "October", "November", "December"
+    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
+        "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
     ]
     const today = new Date();
-    const day = today.getDate();
+    const weekDayNum = today.getDay();
+    const weekday = days[weekDayNum];
     const month = today.getMonth();
-    const year = today.getFullYear();
-    const date = `${day} ${months[month]} ${year}`
-    document.getElementById("date").innerHTML = date;
-    console.log(date)
+    const dateToday = `${weekDayNum}, ${weekday} ${months[month]}`
+    document.getElementById("date").innerHTML = dateToday;
+    console.log(dateToday)
 
 }
 
