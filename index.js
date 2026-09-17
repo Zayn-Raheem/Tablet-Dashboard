@@ -51,6 +51,12 @@ async function updateWeather() {
     document.getElementById("cloud_cover").innerHTML = cloudCoverDisplay;
     document.getElementById("feels_like").innerHTML = feelsLikeDisplay;
 
+    console.log(temperature)
+    console.log(weatherDescription)
+    console.log(humidityDisplay)
+    console.log(windDisplay)
+    console.log(cloudCoverDisplay)
+    console.log(feelsLikeDisplay)
 
 }
 
