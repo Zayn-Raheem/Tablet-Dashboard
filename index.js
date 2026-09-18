@@ -125,10 +125,7 @@ function updatePrayerDisplay() {
 }
 
 fetchPrayerTimes();
-setInterval(updatePrayerDisplay, 60000);
-
-
-
+setInterval(updatePrayerDisplay, 30000);
 setInterval(updateClock, 1000);
 setInterval(updateWeather, 120000);
 updateClock();
