@@ -70,29 +70,23 @@
                 </div>
             </section>
 
-            <!-- QUAD 3: TIMETABLE (Uni Schedule) -->
-            <section class="quadrant timetable-quad">
+            <!-- QUAD 3: PRAYER TIMES (Islam) -->
+            <section class="quadrant prayer-quad">
                 <div class="quad-header">
-                    <span>TIMETABLE</span>
-                    <span class="sync-tag">[ UNI ]</span>
+                    <span>PRAYER TIMES</span>
+                    <span class="sync-tag">[ ISLAM ]</span>
                 </div>
-                <div class="quad-content">
-                    <div class="schedule-grid">
-                        <div class="slot current">
-                            <span class="code">CS301</span>
-                            <span class="detail">09:00 - Data Structures</span>
-                            <span class="loc">Lec Hall A</span>
-                        </div>
-                        <div class="slot">
-                            <span class="code">CS305</span>
-                            <span class="detail">11:30 - Operating Systems</span>
-                            <span class="loc">Lab 2B</span>
-                        </div>
-                        <div class="slot">
-                            <span class="code">MATH202</span>
-                            <span class="detail">14:00 - Linear Algebra</span>
-                            <span class="loc">Lec Hall C</span>
-                        </div>
+                <div class="quad-content weather-layout">
+                    <div class="weather-main">
+                        <div class="big-temp" id="current-prayer">ISHA</div>
+                        <div class="condition" id="next-prayer-countdown">NEXT IN 07H 03M</div>
+                    </div>
+                    <div class="weather-details">
+                        <p id="fajr-detail">FAJR: 05:11 AM</p>
+                        <p id="dhuhr-detail">DHUHR: 01:04 PM</p>
+                        <p id="asr-detail">ASR: 04:25 PM</p>
+                        <p id="maghrib-detail">MAGHRIB: 07:18 PM</p>
+                        <p id="isha-detail">ISHA: 07:18 PM</p>
                     </div>
                 </div>
             </section>
