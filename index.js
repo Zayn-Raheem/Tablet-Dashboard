@@ -228,6 +228,24 @@ async function updateTasks() {
   }
 }
 
+function getFirstWeekday(year, month) {
+  // month is 0-indexed (8 = September)
+  const firstDay = new Date(year, month, 1);
+  return firstDay.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+}
+
+function getDaysInMonth(year, month) {
+  // Day 0 of October (month + 1 = 9) resolves to last day of September
+  const lastDay = new Date(year, month + 1, 0);
+  return lastDay.getDate();
+}
+
+// Running for September 2026:
+const year = 2026;
+const monthJS = 8; // September in 0-indexed JS
+
+console.log("First Weekday Index:", getFirstWeekday(year, monthJS));
+console.log("Total Days in Month:", getDaysInMonth(year, monthJS));
 setInterval(updatePrayerDisplay, 30000);
 setInterval(updateClock, 1000);
 setInterval(updateWeather, 120000);
