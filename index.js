@@ -2,7 +2,7 @@ let viewYear = new Date().getFullYear();
 let viewMonth = new Date().getMonth(); // 0-indexed
 
 function openMonthView() {
-  document.getElementById("month-view").style.display = "block";
+  document.getElementById("month-view").style.display = "flex";
   renderMonthGrid();
 }
 
@@ -24,135 +24,123 @@ function changeMonth(direction) {
   renderMonthGrid();
 }
 
-async function renderMonthGrid() {
-  // To be implemented next
-}
-
 function updateClock() {
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, "0");
   const minutes = now.getMinutes().toString().padStart(2, "0");
   const seconds = now.getSeconds().toString().padStart(2, "0");
-  const time = `${hours}:${minutes}:${seconds}` ;
+  const time = `${hours}:${minutes}:${seconds}`;
   document.getElementById("clock").innerHTML = time;
-  
-  console.log("clock is running")
 
   return time;
 }
 
 function updateDate() {
-    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", 
-        "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
-    ];
-    const today = new Date();
-    const weekDayNum = today.getDay();
-    const weekday = days[weekDayNum];
-    const month = today.getMonth();
-    const dayOfMonth = today.getDate();
+  const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const today = new Date();
+  const weekDayNum = today.getDay();
+  const weekday = days[weekDayNum];
+  const month = today.getMonth();
+  const dayOfMonth = today.getDate();
 
-    const dateToday = `${weekday}, ${months[month]} ${dayOfMonth}`;
-    
-    document.getElementById("date").innerHTML = dateToday;
-    console.log(dateToday);
+  const dateToday = `${weekday}, ${months[month]} ${dayOfMonth}`;
+  document.getElementById("date").innerHTML = dateToday;
 }
 
 async function updateWeather() {
-    const weatherApi = await fetch('https://api.openweathermap.org/data/2.5/weather?q=Birmingham,UK&appid=93eab7c744e431f9d47792b7b9f09238&units=metric')
-    const weatherData = await weatherApi.json()
-    const temperature = weatherData.main.temp;
-    const temperatureDisplay = `${Math.round(temperature, 2)}°C`
+  try {
+    const weatherApi = await fetch('https://api.openweathermap.org/data/2.5/weather?q=Birmingham,UK&appid=93eab7c744e431f9d47792b7b9f09238&units=metric');
+    const weatherData = await weatherApi.json();
 
+    const temperatureDisplay = `${Math.round(weatherData.main.temp)}°C`;
     const weatherDescription = weatherData.weather[0].description;    
-    const humidity = weatherData.main.humidity;
-    const humidityDisplay = `HUMIDITY: ${humidity}%`
+    const humidityDisplay = `HUMIDITY: ${weatherData.main.humidity}%`;
 
-    const windSpeed = weatherData.wind.speed;
-    const windSpeedKmh = Math.round(windSpeed * 3.6);
-    const windDisplay = `WIND: ${windSpeedKmh}KM/H`
+    const windSpeedKmh = Math.round(weatherData.wind.speed * 3.6);
+    const windDisplay = `WIND: ${windSpeedKmh} KM/H`;
 
-    const cloudCover = weatherData.clouds.all;
-    const cloudCoverDisplay = `Cloud Cover: ${cloudCover}%`
-
-    const feelsLike = weatherData.main.feels_like;
-    const feelsLikeDisplay = `Feels like: ${feelsLike}°C` 
+    const cloudCoverDisplay = `CLOUD: ${weatherData.clouds.all}%`;
+    const feelsLikeDisplay = `FEELS: ${Math.round(weatherData.main.feels_like)}°C`;
 
     document.getElementById("temperature-detail").innerHTML = temperatureDisplay;
-    document.getElementById("temperature-main").innerHTML= temperatureDisplay;
-    document.getElementById("weather").innerHTML= weatherDescription;
+    document.getElementById("temperature-main").innerHTML = temperatureDisplay;
+    document.getElementById("weather").innerHTML = weatherDescription;
     document.getElementById("humidity").innerHTML = humidityDisplay;
     document.getElementById("windSpeed").innerHTML = windDisplay;
     document.getElementById("cloud_cover").innerHTML = cloudCoverDisplay;
     document.getElementById("feels_like").innerHTML = feelsLikeDisplay;
+  } catch (error) {
+    console.error("Error fetching weather:", error);
+  }
 }
 
 let prayerData = null;
 
 async function fetchPrayerTimes() {
-    try {
-        const prayerAPI = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Birmingham&country=UK&method=1');
-        const json = await prayerAPI.json();
-        const timings = json.data.timings;
+  try {
+    const prayerAPI = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Birmingham&country=UK&method=1');
+    const json = await prayerAPI.json();
+    const timings = json.data.timings;
 
-        prayerData = [
-            { name: "FAJR", time: timings.Fajr },
-            { name: "DHUHR", time: timings.Dhuhr },
-            { name: "ASR", time: timings.Asr },
-            { name: "MAGHRIB", time: timings.Maghrib },
-            { name: "ISHA", time: timings.Isha }
-        ];
+    prayerData = [
+      { name: "FAJR", time: timings.Fajr },
+      { name: "DHUHR", time: timings.Dhuhr },
+      { name: "ASR", time: timings.Asr },
+      { name: "MAGHRIB", time: timings.Maghrib },
+      { name: "ISHA", time: timings.Isha }
+    ];
 
-        updatePrayerDisplay();
-    } catch (error) {
-        console.error("Error fetching prayer times:", error);
-    }
+    updatePrayerDisplay();
+  } catch (error) {
+    console.error("Error fetching prayer times:", error);
+  }
 }
 
 function updatePrayerDisplay() {
-    if (!prayerData) return;
+  if (!prayerData) return;
 
-    const now = new Date();
+  const now = new Date();
 
-    function getPrayerDate(timeStr, addDays = 0) {
-        const [h, m] = timeStr.split(':').map(Number);
-        const d = new Date(now);
-        d.setDate(d.getDate() + addDays);
-        d.setHours(h, m, 0, 0);
-        return d;
+  function getPrayerDate(timeStr, addDays = 0) {
+    const [h, m] = timeStr.split(':').map(Number);
+    const d = new Date(now);
+    d.setDate(d.getDate() + addDays);
+    d.setHours(h, m, 0, 0);
+    return d;
+  }
+
+  let currentPrayer = "ISHA";
+  let nextPrayerDate = getPrayerDate(prayerData[0].time, 1);
+
+  for (let i = 0; i < prayerData.length; i++) {
+    const prayerDate = getPrayerDate(prayerData[i].time);
+
+    if (now >= prayerDate) {
+      currentPrayer = prayerData[i].name;
+
+      if (i < prayerData.length - 1) {
+        nextPrayerDate = getPrayerDate(prayerData[i + 1].time);
+      } else {
+        nextPrayerDate = getPrayerDate(prayerData[0].time, 1);
+      }
+    } else if (i === 0) {
+      nextPrayerDate = prayerDate;
     }
+  }
 
-    let currentPrayer = "ISHA";
-    let nextPrayerDate = getPrayerDate(prayerData[0].time, 1);
+  const diffMs = nextPrayerDate - now;
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60)).toString().padStart(2, "0");
+  const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, "0");
 
-    for (let i = 0; i < prayerData.length; i++) {
-        const prayerDate = getPrayerDate(prayerData[i].time);
+  document.getElementById("current-prayer").innerHTML = currentPrayer;
+  document.getElementById("next-prayer-countdown").innerHTML = `NEXT IN ${diffHours}H ${diffMinutes}M`;
 
-        if (now >= prayerDate) {
-            currentPrayer = prayerData[i].name;
-
-            if (i < prayerData.length - 1) {
-                nextPrayerDate = getPrayerDate(prayerData[i + 1].time);
-            } else {
-                nextPrayerDate = getPrayerDate(prayerData[0].time, 1);
-            }
-        } else if (i === 0) {
-            nextPrayerDate = prayerDate;
-        }
-    }
-
-    const diffMs = nextPrayerDate - now;
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60)).toString().padStart(2, "0");
-    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, "0");
-
-    document.getElementById("current-prayer").innerHTML = currentPrayer;
-    document.getElementById("next-prayer-countdown").innerHTML = `NEXT IN ${diffHours}H ${diffMinutes}M`;
-
-    document.getElementById("fajr-detail").innerHTML = `FAJR: ${prayerData[0].time}`;
-    document.getElementById("dhuhr-detail").innerHTML = `DHUHR: ${prayerData[1].time}`;
-    document.getElementById("asr-detail").innerHTML = `ASR: ${prayerData[2].time}`;
-    document.getElementById("maghrib-detail").innerHTML = `MAGHRIB: ${prayerData[3].time}`;
-    document.getElementById("isha-detail").innerHTML = `ISHA: ${prayerData[4].time}`;
+  document.getElementById("fajr-detail").innerHTML = `FAJR: ${prayerData[0].time}`;
+  document.getElementById("dhuhr-detail").innerHTML = `DHUHR: ${prayerData[1].time}`;
+  document.getElementById("asr-detail").innerHTML = `ASR: ${prayerData[2].time}`;
+  document.getElementById("maghrib-detail").innerHTML = `MAGHRIB: ${prayerData[3].time}`;
+  document.getElementById("isha-detail").innerHTML = `ISHA: ${prayerData[4].time}`;
 }
 
 function formatEventTime(isoString) {
@@ -171,7 +159,6 @@ async function updateCalendar() {
     let html = "";
     for (const event of events) {
       const timeFormatted = formatEventTime(event.start);
-      // Fallback display if start time is missing or invalid
       const timeDisplay = timeFormatted ? `<strong>${timeFormatted}</strong> - ` : "";
       
       html += `<li>${timeDisplay}${event.summary}</li>`;
@@ -188,7 +175,7 @@ async function updateCalendar() {
   }
 }
 
-// --- TASK FILTERING ADDITIONS ---
+// --- TASK FILTERING ---
 let allTasks = [];
 let currentView = "today";
 
@@ -259,21 +246,14 @@ async function updateTasks() {
 }
 
 function getFirstWeekday(year, month) {
-  // month is 0-indexed (8 = September)
   const firstDay = new Date(year, month, 1);
   return firstDay.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 }
 
 function getDaysInMonth(year, month) {
-  // Day 0 of October (month + 1 = 9) resolves to last day of September
   const lastDay = new Date(year, month + 1, 0);
   return lastDay.getDate();
 }
-
-// Running for September 2026:
-const year = 2026;
-const monthJS = 8; // September in 0-indexed JS
-
 
 function groupEventsByDay(events) {
   const eventsByDay = {};
@@ -281,7 +261,6 @@ function groupEventsByDay(events) {
   for (const event of events) {
     if (!event.start) continue;
 
-    // Google Calendar events use start.dateTime for timed events or start.date for all-day events
     const startDateStr = typeof event.start === "object" 
       ? (event.start.dateTime || event.start.date) 
       : event.start;
@@ -295,7 +274,6 @@ function groupEventsByDay(events) {
       eventsByDay[dayNumber] = [];
     }
 
-    // Check if it's a date-only string (all-day event like "2026-05-21")
     const isAllDay = !startDateStr.includes("T");
     const timeFormatted = isAllDay ? "" : formatEventTime(startDateStr);
     
@@ -313,40 +291,38 @@ async function renderMonthGrid() {
     "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
   ];
 
-  // 1. Update month-title text (e.g. "SEPTEMBER 2026")
   document.getElementById("month-title").innerText = `${months[viewMonth]} ${viewYear}`;
 
   const monthGridEl = document.getElementById("month-grid");
   monthGridEl.innerHTML = "<div class='day-cell'>Loading...</div>";
 
   try {
-    // 2. Fetch events for the selected month (+1 conversion for 1-indexed API query)
     const response = await fetch(
       `https://tablet-dashboard-backend.onrender.com/api/calendar/month?year=${viewYear}&month=${viewMonth + 1}`
     );
     const data = await response.json();
-    
-    // Extract array safely from the wrapper object { status: "success", ..., events: [...] }
     const events = data.events || [];
 
-    // 3. Group events by day number (1-31)
     const eventsByDay = groupEventsByDay(events);
-
-    // 4. Calculate grid layout parameters
     const firstWeekday = getFirstWeekday(viewYear, viewMonth);
     const totalDays = getDaysInMonth(viewYear, viewMonth);
 
+    const now = new Date();
+    const isCurrentMonth = now.getFullYear() === viewYear && now.getMonth() === viewMonth;
+
     let html = "";
 
-    // 5. Render blank leading padding cells
+    // Blank leading padding cells
     for (let i = 0; i < firstWeekday; i++) {
       html += `<div class="day-cell empty"></div>`;
     }
 
-    // 6. Render standard day cells (1 to totalDays)
+    // Render day cells
     for (let day = 1; day <= totalDays; day++) {
       const dayEvents = eventsByDay[day] || [];
-      
+      const isToday = isCurrentMonth && day === now.getDate();
+      const todayClass = isToday ? " today" : "";
+
       let eventsHtml = "";
       if (dayEvents.length > 0) {
         eventsHtml = dayEvents
@@ -355,7 +331,7 @@ async function renderMonthGrid() {
       }
 
       html += `
-        <div class="day-cell">
+        <div class="day-cell${todayClass}">
           <div class="day-number">${day}</div>
           ${eventsHtml}
         </div>
@@ -369,12 +345,11 @@ async function renderMonthGrid() {
   }
 }
 
-
-console.log("First Weekday Index:", getFirstWeekday(year, monthJS));
-console.log("Total Days in Month:", getDaysInMonth(year, monthJS));
+// Initializers & Interval Timers
 setInterval(updatePrayerDisplay, 30000);
 setInterval(updateClock, 1000);
 setInterval(updateWeather, 120000);
+
 updateClock();
 fetchPrayerTimes();
 updateWeather();
