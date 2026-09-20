@@ -157,6 +157,28 @@ async function updateCalendar() {
   }
 }
 
+async function updateTasks() {
+  try {
+    const response = await fetch("https://tablet-dashboard-backend.onrender.com/api/tasks");
+    const tasks = await response.json();
+
+    let html = "";
+    for (const task of tasks) {
+      const checkmark = task.completed ? "[X]" : "[ ]";
+      html += `<li>${checkmark} ${task.title}</li>`;
+    }
+
+    if (tasks.length === 0) {
+      html = "<li>No tasks today</li>";
+    }
+
+    document.getElementById("task-list").innerHTML = html;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    document.getElementById("task-list").innerHTML = "<li>Unable to load tasks</li>";
+  }
+}
+
 setInterval(updatePrayerDisplay, 30000);
 setInterval(updateClock, 1000);
 setInterval(updateWeather, 120000);
