@@ -156,17 +156,64 @@ async function updateCalendar() {
     const response = await fetch("https://tablet-dashboard-backend.onrender.com/api/calendar");
     const events = await response.json();
 
-    let html = "";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const dayAfterTomorrow = new Date(today);
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+
+    const todayEvents = [];
+    const tomorrowEvents = [];
+
     for (const event of events) {
-      const timeFormatted = formatEventTime(event.start);
-      const timeDisplay = timeFormatted ? `<strong>${timeFormatted}</strong> - ` : "";
+      if (!event.start) continue;
+
+      const startDateStr = typeof event.start === "object" 
+        ? (event.start.dateTime || event.start.date) 
+        : event.start;
+
+      if (!startDateStr) continue;
+
+      const eventDate = new Date(startDateStr);
       
-      html += `<li>${timeDisplay}${event.summary}</li>`;
+      if (eventDate >= today && eventDate < tomorrow) {
+        todayEvents.push({ ...event, startDateStr });
+      } else if (eventDate >= tomorrow && eventDate < dayAfterTomorrow) {
+        tomorrowEvents.push({ ...event, startDateStr });
+      }
     }
 
-    if (events.length === 0) {
-      html = "<li>No events scheduled</li>";
+    function renderEventList(eventList) {
+      if (eventList.length === 0) {
+        return `<li style="color: var(--text-muted); font-size: 0.95rem;">No events scheduled</li>`;
+      }
+
+      return eventList.map((event) => {
+        const isAllDay = !event.startDateStr.includes("T");
+        const timeFormatted = isAllDay ? "" : formatEventTime(event.startDateStr);
+        const timeDisplay = timeFormatted ? `<strong>${timeFormatted}</strong> - ` : "";
+        return `<li>${timeDisplay}${event.summary}</li>`;
+      }).join("");
     }
+
+    const html = `
+      <div class="calendar-section">
+        <div class="cal-day-label">TODAY</div>
+        <ul class="task-list">
+          ${renderEventList(todayEvents)}
+        </ul>
+      </div>
+      <div class="cal-divider"></div>
+      <div class="calendar-section">
+        <div class="cal-day-label">TOMORROW</div>
+        <ul class="task-list">
+          ${renderEventList(tomorrowEvents)}
+        </ul>
+      </div>
+    `;
 
     document.getElementById("calendar-events").innerHTML = html;
   } catch (error) {
@@ -175,7 +222,6 @@ async function updateCalendar() {
   }
 }
 
-// --- TASK FILTERING ---
 let allTasks = [];
 let currentView = "today";
 
@@ -347,7 +393,7 @@ async function renderMonthGrid() {
 
 // Initializers & Interval Timers
 setInterval(updatePrayerDisplay, 30000);
-setInterval(updateClock, 1000);
+setInterval(updateClock, 500);
 setInterval(updateWeather, 120000);
 setInterval(updateTasks, 1000);
 setInterval(updateCalendar, 1000);

@@ -323,3 +323,23 @@ html, body {
   padding: 2px 4px;
   border-left: 2px solid var(--accent-green);
 }
+
+/* --- CALENDAR TODAY / TOMORROW SPLIT --- */
+.cal-day-label {
+  font-family: var(--font-header);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.cal-divider {
+  border-bottom: 1px dashed var(--border-color);
+  margin: 8px 0;
+  opacity: 0.8;
+}
+
+.calendar-section {
+  display: flex;
+  flex-direction: column;
+}
