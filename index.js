@@ -349,7 +349,8 @@ async function renderMonthGrid() {
 setInterval(updatePrayerDisplay, 30000);
 setInterval(updateClock, 1000);
 setInterval(updateWeather, 120000);
-
+setInterval(updateTasks, 1000);
+setInterval(updateCalendar, 1000);
 updateClock();
 fetchPrayerTimes();
 updateWeather();
