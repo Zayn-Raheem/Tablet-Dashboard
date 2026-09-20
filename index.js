@@ -124,10 +124,45 @@ function updatePrayerDisplay() {
     document.getElementById("isha-detail").innerHTML = `ISHA: ${prayerData[4].time}`;
 }
 
-fetchPrayerTimes();
+function formatEventTime(isoString) {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
+
+async function updateCalendar() {
+  try {
+    const response = await fetch("https://tablet-dashboard-backend.onrender.com/api/calendar");
+    const events = await response.json();
+
+    let html = "";
+    for (const event of events) {
+      const timeFormatted = formatEventTime(event.start);
+      // Fallback display if start time is missing or invalid
+      const timeDisplay = timeFormatted ? `<strong>${timeFormatted}</strong> - ` : "";
+      
+      html += `<li>${timeDisplay}${event.summary}</li>`;
+    }
+
+    if (events.length === 0) {
+      html = "<li>No events scheduled</li>";
+    }
+
+    document.getElementById("calendar-events").innerHTML = html;
+  } catch (error) {
+    console.error("Error fetching calendar:", error);
+    document.getElementById("calendar-events").innerHTML = "<li>Unable to load events</li>";
+  }
+}
+
 setInterval(updatePrayerDisplay, 30000);
 setInterval(updateClock, 1000);
 setInterval(updateWeather, 120000);
 updateClock();
+fetchPrayerTimes();
 updateWeather();
 updateDate();
+updateTasks();
+updateCalendar();
