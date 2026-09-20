@@ -75,6 +75,11 @@ html, body {
   gap: 12px;
 }
 
+.tab-btn.active {
+  color: var(--bg-base);
+  background: var(--accent-green);
+}
+
 .quadrant {
   border: 1px solid var(--accent-green);
   background: rgba(63, 255, 162, 0.02);

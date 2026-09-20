@@ -56,6 +56,7 @@ async function updateWeather() {
     document.getElementById("cloud_cover").innerHTML = cloudCoverDisplay;
     document.getElementById("feels_like").innerHTML = feelsLikeDisplay;
 }
+
 let prayerData = null;
 
 async function fetchPrayerTimes() {
@@ -157,22 +158,70 @@ async function updateCalendar() {
   }
 }
 
+// --- TASK FILTERING ADDITIONS ---
+let allTasks = [];
+let currentView = "today";
+
+function categorizeTask(task) {
+  if (task.completed) {
+    return "completed";
+  }
+
+  if (!task.due) {
+    return "today";
+  }
+
+  const dueDate = new Date(task.due);
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+  dueDate.setHours(0, 0, 0, 0);
+
+  if (dueDate <= today) {
+    return "today";
+  }
+
+  return "upcoming";
+}
+
+function renderTasks() {
+  const filteredTasks = allTasks.filter((task) => categorizeTask(task) === currentView);
+
+  let html = "";
+  for (const task of filteredTasks) {
+    const checkmark = task.completed ? "[X]" : "[ ]";
+    html += `<li>${checkmark} ${task.title}</li>`;
+  }
+
+  if (filteredTasks.length === 0) {
+    html = `<li>No ${currentView} tasks</li>`;
+  }
+
+  document.getElementById("task-list").innerHTML = html;
+
+  const tabs = ["today", "upcoming", "completed"];
+  tabs.forEach((tab) => {
+    const btn = document.getElementById(`tab-${tab}`);
+    if (btn) {
+      if (tab === currentView) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    }
+  });
+}
+
+function setTaskView(view) {
+  currentView = view;
+  renderTasks();
+}
+
 async function updateTasks() {
   try {
     const response = await fetch("https://tablet-dashboard-backend.onrender.com/api/tasks");
-    const tasks = await response.json();
-
-    let html = "";
-    for (const task of tasks) {
-      const checkmark = task.completed ? "[X]" : "[ ]";
-      html += `<li>${checkmark} ${task.title}</li>`;
-    }
-
-    if (tasks.length === 0) {
-      html = "<li>No tasks today</li>";
-    }
-
-    document.getElementById("task-list").innerHTML = html;
+    allTasks = await response.json();
+    renderTasks();
   } catch (error) {
     console.error("Error fetching tasks:", error);
     document.getElementById("task-list").innerHTML = "<li>Unable to load tasks</li>";

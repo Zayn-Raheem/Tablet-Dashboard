@@ -15,14 +15,14 @@
         <!-- Top Navigation / Status Bar -->
         <header class="navbar">
             <div class="nav-section time-date">
-                <span class="clock" id="clock">21:59:07</span>
-                <span class="date" id= "date"></span>
+                <span class="clock" id="clock">--:--:--</span>
+                <span class="date" id="date"></span>
             </div>
             <div class="nav-section title-banner">
                 <h1>DAILY OPS</h1>
             </div>
             <div class="nav-section weather-status">
-                <span class="temp" id="temperature-detail">19°C</span>
+                <span class="temp" id="temperature-detail">--°C</span>
                 <span class="weather-icon">☁</span>
                 <span class="battery">[ 96% ]</span>
             </div>
@@ -35,15 +35,15 @@
             <section class="quadrant tasks-quad">
                 <div class="quad-header">
                     <span>TASKS</span>
-                    <span class="sync-tag">[ G-TASKS ]</span>
+                    <div class="task-tabs">
+                        <button class="tab-btn active" id="tab-today" onclick="setTaskView('today')">[ TODAY ]</button>
+                        <button class="tab-btn" id="tab-upcoming" onclick="setTaskView('upcoming')">[ UPCOMING ]</button>
+                        <button class="tab-btn" id="tab-completed" onclick="setTaskView('completed')">[ DONE ]</button>
+                    </div>
                 </div>
                 <div class="quad-content">
                     <ul class="task-list" id="task-list">
-                        <li class="completed">[X] Submit CS assignment</li>
-                        <li class="task-overdue">[!] Read Chapter 4 - Networks</li>
-                        <li>[ ] Clean desk & workstation</li>
-                        <li>[ ] Buy groceries</li>
-                        <li>[ ] Reply to lab instructor</li>
+                        <li>Loading tasks...</li>
                     </ul>
                 </div>
             </section>
@@ -55,17 +55,8 @@
                     <span class="sync-tag">[ G-CAL ]</span>
                 </div>
                 <div class="quad-content" id="calendar-events">
-                    <div class="event-item active">
-                        <span class="time">10:00 AM</span>
-                        <span class="event-title">Team Standup Meeting</span>
-                    </div>
                     <div class="event-item">
-                        <span class="time">02:30 PM</span>
-                        <span class="event-title">Project Review w/ Mentor</span>
-                    </div>
-                    <div class="event-item">
-                        <span class="time">06:00 PM</span>
-                        <span class="event-title">Gym - Upper Body</span>
+                        <span class="event-title">Loading events...</span>
                     </div>
                 </div>
             </section>
@@ -78,15 +69,15 @@
                 </div>
                 <div class="quad-content weather-layout">
                     <div class="weather-main">
-                        <div class="big-temp" id="current-prayer">ISHA</div>
-                        <div class="condition" id="next-prayer-countdown">NEXT IN 07H 03M</div>
+                        <div class="big-temp" id="current-prayer">--</div>
+                        <div class="condition" id="next-prayer-countdown">CALCULATING...</div>
                     </div>
                     <div class="weather-details">
-                        <p id="fajr-detail">FAJR: 05:11 AM</p>
-                        <p id="dhuhr-detail">DHUHR: 01:04 PM</p>
-                        <p id="asr-detail">ASR: 04:25 PM</p>
-                        <p id="maghrib-detail">MAGHRIB: 07:18 PM</p>
-                        <p id="isha-detail">ISHA: 07:18 PM</p>
+                        <p id="fajr-detail">FAJR: --:--</p>
+                        <p id="dhuhr-detail">DHUHR: --:--</p>
+                        <p id="asr-detail">ASR: --:--</p>
+                        <p id="maghrib-detail">MAGHRIB: --:--</p>
+                        <p id="isha-detail">ISHA: --:--</p>
                     </div>
                 </div>
             </section>
@@ -99,14 +90,14 @@
                 </div>
                 <div class="quad-content weather-layout">
                     <div class="weather-main">
-                        <div class="big-temp" id="temperature-main">°C</div>
-                        <div class="condition" id="weather"></div>
+                        <div class="big-temp" id="temperature-main">--°C</div>
+                        <div class="condition" id="weather">--</div>
                     </div>
                     <div class="weather-details">
-                        <p id="humidity">HUMIDITY:</p>
-                        <p id="windSpeed">WIND:</p>
-                        <p id="cloud_cover">CLOUD: </p>
-                        <p id="feels_like">FEELS:</p>
+                        <p id="humidity">HUMIDITY: --%</p>
+                        <p id="windSpeed">WIND: -- km/h</p>
+                        <p id="cloud_cover">CLOUD: --%</p>
+                        <p id="feels_like">FEELS: --°C</p>
                     </div>
                 </div>
             </section>
@@ -114,5 +105,4 @@
         </main>
     </div>
 </body>
-
 </html>
