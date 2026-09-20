@@ -52,7 +52,7 @@
             <section class="quadrant calendar-quad">
                 <div class="quad-header">
                     <span>CALENDAR</span>
-                    <span class="sync-tag">[ G-CAL ]</span>
+                    <span class="sync-tag" onclick="openMonthView()" style="cursor:pointer;">[ MONTH VIEW ]</span>
                 </div>
                 <div class="quad-content" id="calendar-events">
                     <div class="event-item">
@@ -103,6 +103,17 @@
             </section>
 
         </main>
+    </div>
+
+    <!-- Month View Modal Grid -->
+    <div id="month-view" style="display: none;">
+      <div class="month-header">
+        <button onclick="changeMonth(-1)">[ PREV ]</button>
+        <h2 id="month-title">SEPTEMBER 2026</h2>
+        <button onclick="changeMonth(1)">[ NEXT ]</button>
+        <button onclick="closeMonthView()">[ CLOSE ]</button>
+      </div>
+      <div class="month-grid" id="month-grid"></div>
     </div>
 </body>
 </html>

@@ -1,3 +1,33 @@
+let viewYear = new Date().getFullYear();
+let viewMonth = new Date().getMonth(); // 0-indexed
+
+function openMonthView() {
+  document.getElementById("month-view").style.display = "block";
+  renderMonthGrid();
+}
+
+function closeMonthView() {
+  document.getElementById("month-view").style.display = "none";
+}
+
+function changeMonth(direction) {
+  viewMonth += direction;
+
+  if (viewMonth > 11) {
+    viewMonth = 0;
+    viewYear += 1;
+  } else if (viewMonth < 0) {
+    viewMonth = 11;
+    viewYear -= 1;
+  }
+
+  renderMonthGrid();
+}
+
+async function renderMonthGrid() {
+  // To be implemented next
+}
+
 function updateClock() {
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, "0");
@@ -243,6 +273,102 @@ function getDaysInMonth(year, month) {
 // Running for September 2026:
 const year = 2026;
 const monthJS = 8; // September in 0-indexed JS
+
+
+function groupEventsByDay(events) {
+  const eventsByDay = {};
+
+  for (const event of events) {
+    if (!event.start) continue;
+
+    // Google Calendar events use start.dateTime for timed events or start.date for all-day events
+    const startDateStr = typeof event.start === "object" 
+      ? (event.start.dateTime || event.start.date) 
+      : event.start;
+
+    if (!startDateStr) continue;
+
+    const eventDate = new Date(startDateStr);
+    const dayNumber = eventDate.getDate();
+
+    if (!eventsByDay[dayNumber]) {
+      eventsByDay[dayNumber] = [];
+    }
+
+    // Check if it's a date-only string (all-day event like "2026-05-21")
+    const isAllDay = !startDateStr.includes("T");
+    const timeFormatted = isAllDay ? "" : formatEventTime(startDateStr);
+    
+    const displayTitle = timeFormatted ? `${timeFormatted} ${event.summary}` : event.summary;
+
+    eventsByDay[dayNumber].push(displayTitle);
+  }
+
+  return eventsByDay;
+}
+
+async function renderMonthGrid() {
+  const months = [
+    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+  ];
+
+  // 1. Update month-title text (e.g. "SEPTEMBER 2026")
+  document.getElementById("month-title").innerText = `${months[viewMonth]} ${viewYear}`;
+
+  const monthGridEl = document.getElementById("month-grid");
+  monthGridEl.innerHTML = "<div class='day-cell'>Loading...</div>";
+
+  try {
+    // 2. Fetch events for the selected month (+1 conversion for 1-indexed API query)
+    const response = await fetch(
+      `https://tablet-dashboard-backend.onrender.com/api/calendar/month?year=${viewYear}&month=${viewMonth + 1}`
+    );
+    const data = await response.json();
+    
+    // Extract array safely from the wrapper object { status: "success", ..., events: [...] }
+    const events = data.events || [];
+
+    // 3. Group events by day number (1-31)
+    const eventsByDay = groupEventsByDay(events);
+
+    // 4. Calculate grid layout parameters
+    const firstWeekday = getFirstWeekday(viewYear, viewMonth);
+    const totalDays = getDaysInMonth(viewYear, viewMonth);
+
+    let html = "";
+
+    // 5. Render blank leading padding cells
+    for (let i = 0; i < firstWeekday; i++) {
+      html += `<div class="day-cell empty"></div>`;
+    }
+
+    // 6. Render standard day cells (1 to totalDays)
+    for (let day = 1; day <= totalDays; day++) {
+      const dayEvents = eventsByDay[day] || [];
+      
+      let eventsHtml = "";
+      if (dayEvents.length > 0) {
+        eventsHtml = dayEvents
+          .map((title) => `<div class="event-title">${title}</div>`)
+          .join("");
+      }
+
+      html += `
+        <div class="day-cell">
+          <div class="day-number">${day}</div>
+          ${eventsHtml}
+        </div>
+      `;
+    }
+
+    monthGridEl.innerHTML = html;
+  } catch (error) {
+    console.error("Error fetching month grid events:", error);
+    monthGridEl.innerHTML = "<div class='day-cell'>Unable to load month view</div>";
+  }
+}
+
 
 console.log("First Weekday Index:", getFirstWeekday(year, monthJS));
 console.log("Total Days in Month:", getDaysInMonth(year, monthJS));

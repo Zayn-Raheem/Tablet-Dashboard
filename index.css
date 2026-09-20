@@ -193,3 +193,31 @@ html, body {
   font-size: 1.05rem;
   line-height: 1.3;
 }
+
+/* --- MONTH VIEW STYLES --- */
+#month-view {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: var(--bg-base);
+  z-index: 100;
+  padding: 20px;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 20px;
+}
+
+.day-cell {
+  border: 1px solid var(--accent-green);
+  min-height: 80px;
+  padding: 4px;
+  font-size: 0.9rem;
+}
+
+.day-cell .day-number { 
+  color: var(--text-muted); 
+}
